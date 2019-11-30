@@ -29,7 +29,7 @@
 				var i=0;
 				 var d = JSON.parse(data);
 				 
-				  var s="<select name=\"cat\" id=\"cat\">";
+				  var s="<select class=\"form-control\" name=\"cat\" id=\"cat\">";
 				  for (i = 0; i <d.length; i++) { 
 					
 					s+=" <option value=\""+d[i].categoria+"\">"+d[i].categoria+"</option>";
@@ -49,26 +49,33 @@
 
   <div class="container">
   <br>
-  <p>Per esaminare un app presente in github e controllare se ha permessi anomali, inserisci il link della repository nell'apposito campo di testo e inserisci la categoria dell'app tra le opzioni. </p>
+   <h1>Test App Android Permission</h1>
+  <p>Quesa pagina web serve per esaminare i permessi di un app open source presente su Github</p>
+  <blockquote>
+    <p>Per esaminare un app presente in github e controllare se ha permessi anomali, inserisci il link della repository nell'apposito campo di testo e inserisci la categoria dell'app tra le opzioni.</p>
+    <footer>UniSA</footer>
+  </blockquote>
+ 
 
 
 <div>
-		<input type="text" placeholder="inserisci URL" name="url" id="url" required> <br><br>
+		<input type="text" class="form-control" placeholder="inserisci URL" name="url" id="url" required> <br><br>
 		<div id="categoria"></div>
 		<br>
-		<button onclick='graficoApp()'>confronta</button>
-		<!-- <option value="" selected disabled hidden>categorie</option> -->
+		<button class="btn btn-info" onclick='graficoApp()'>confronta</button>
+		
 		
 	</div>
-
-    <canvas id="myChart"></canvas>
+<br><br>
+    <!--<canvas id="myChart"></canvas>  -->
+    <div id="tabella"></div>
     <br> <br>
   </div>
   
 <script type="text/javascript">
 function graficoApp(){
 
-
+/*
     let myChart = document.getElementById('myChart').getContext('2d');
 
     // Global Options
@@ -154,7 +161,7 @@ function graficoApp(){
       
     });
     
-
+*/
     $(document).ready(function(){ 
     	var url=document.getElementById("url").value;
     	var categoria=document.getElementById("cat");
@@ -177,14 +184,23 @@ function graficoApp(){
     		var i=0;
   
     		 var d = JSON.parse(data);
+    		 var p=0;
+    		 var str="<table class=\"table table-hover\" style=\"width:100%\"><tr><th>Nome permesso</th> <th>Occorrenze di questo permesso in altre app di questa categoria</th>  </tr>";
 			for (i = 0; i <d.length; i++) { 
-    		    massPopChart.data.datasets[0].data.push('1');
-    		    massPopChart.data.datasets[0].backgroundColor.push('rgba(255, 206, 86, 0.6)');
-    		    massPopChart.data.labels.push(d[i].permesso);
+    		   // massPopChart.data.datasets[0].data.push('1');
+    		    //massPopChart.data.datasets[0].backgroundColor.push('rgba(255, 206, 86, 0.6)');
+    		  //  massPopChart.data.labels.push(d[i].permesso);
+    		  if(p==0 && i==3){
+    			  str+="<tr class=\"danger\"> <td>"+d[3].permesso+"</td><td>0</td> </tr>"; 
+    			  
+    		  }
+    		  str+="<tr> <td>"+d[i].permesso+"</td><td>numero</td> </tr>";
 			}
-    		    massPopChart.data.datasets[0].data.push(0);
-    		    massPopChart.update();
-    	   
+			
+			str+="</table>";
+    		   // massPopChart.data.datasets[0].data.push(0);
+    		   // massPopChart.update();
+			  document.getElementById("tabella").innerHTML = str;
     		}
     	
     	function validateUrl(url){
