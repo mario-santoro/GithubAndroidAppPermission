@@ -25,14 +25,14 @@ import model.Permesso;
 @WebServlet("/VisualizzaGraficoApp")
 public class VisualizzaGraficoApp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public VisualizzaGraficoApp() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public VisualizzaGraficoApp() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,87 +43,117 @@ public class VisualizzaGraficoApp extends HttpServlet {
 		System.out.println(url);
 		String cat = request.getParameter("cat");
 		System.out.println(cat);
-		
-		
+		String controll=null;
+
 		////////////start file///////////
-		
-		
+
+
 		ArrayList<String> permessiApp = new ArrayList<String>();
 		ArrayList<Permesso> permessi = new ArrayList<Permesso>();
-		
+		ArrayList<Permesso> p = new ArrayList<Permesso>();
+		String current="C://Users/Utente/università/GithubPermission/WebContent/file";
+
+
 		@SuppressWarnings("resource")
-		BufferedReader readerPermessi = new BufferedReader(new FileReader("C://Users/Utente/università/GithubPermission/WebContent/file/permessiApp.txt"));
+		BufferedReader readerPermessi = new BufferedReader(new FileReader(current+"/permessiApp.txt"));
+		BufferedWriter bw;
 		String linePermessi = readerPermessi.readLine();
 		String[] tuttiPermessi = linePermessi.split("\\s+");
-		
+
 		String linkManifestApplicazione=url;
-		
+
 		AccessPermesso ap=new AccessPermesso();
-	
+
 		String nome = ap.estraiNomeApp(linkManifestApplicazione);
 		System.out.println(nome);
-		if(!(new File("C://Users/Utente/università/GithubPermission/WebContent/file/"+cat)).exists()){
-		(new File("C://Users/Utente/università/GithubPermission/WebContent/file/"+cat)).mkdirs();
-	}
-		String fileTestoApplicazione = "C://Users/Utente/università/GithubPermission/WebContent/file/"+cat+"/"+nome+".txt"; 
+		if(!(new File(current+"/"+cat)).exists()){
+			(new File(current+"/"+cat)).mkdirs();
+		}
 
-		File fileApp = new File(fileTestoApplicazione);
+		String fileTestoApplicazione = current+"/"+cat+"/"+nome+".txt";
 		
-		
-		 URL cg = new URL(url);
-	        BufferedReader in = new BufferedReader(
-	        new InputStreamReader(cg.openStream()));
-	        
-	        
-			FileWriter fw = new FileWriter(fileApp);
+		if(new File(fileTestoApplicazione).exists()){
 			
-			BufferedWriter bw = new BufferedWriter(fw);
-			  String inputLine;
-		        while ((inputLine = in.readLine()) != null){
-		            
-		        		bw.write(inputLine);
-		        }
+			controll= "questa applicaione già è stata analizzata";
+			System.out.println(controll);
+
+		}else{
+
+			File fileApp = new File(fileTestoApplicazione);
+
+
+			URL cg = new URL(url);
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(cg.openStream()));
+
+
+			FileWriter fw = new FileWriter(fileApp);
+
+			bw = new BufferedWriter(fw);
+			String inputLine;
+			while ((inputLine = in.readLine()) != null){
+
+				bw.write(inputLine);
+			}
 			bw.flush();
 			bw.close();
-			
-		
-	
-
-	      
-	        
-		permessiApp=ap.trovaPermessi(fileApp,tuttiPermessi);
 
 
 
-		if(!permessiApp.isEmpty()){  //Check for count not equal to zero
 
-			for (String a : permessiApp){
 
-				Permesso perm = new Permesso();
-				perm.setPermesso(a);
-				perm.setCounter(1);
-				permessi.add(perm);
-				System.out.println(a);
-			}		
+
+			permessiApp=ap.trovaPermessi(fileApp,tuttiPermessi);
+
+
+
+			if(!permessiApp.isEmpty()){  //Check for count not equal to zero
+					
+				for (String a : permessiApp){
+
+					Permesso perm = new Permesso();
+					perm.setPermesso(a);
+					perm.setCounter(1);
+					permessi.add(perm);
+					
+					
+					//System.out.println(a);
+
+				}		
+				p=ap.AggiornaCategorie(permessi, current, cat);
+			}
+			else{
+				controll= "nessun permesso trovato nell'applicazione(nome applicazione) analizzata";
+				System.out.println(controll);
+			}
+
+
+			////////////end file///////////////	
+			if(controll==null){
+				response.getWriter().append("[");
+
+				int i;
+				for(i = 0; i < permessi.size()-1; i++){
+
+					Permesso prova = permessi.get(i);
+
+					if(p.get(i).getPermesso()==prova.getPermesso()){
+
+						response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\"},");
+					}else{
+
+						response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\"0\"},");
+					}
+
+				}
+				Permesso prova = permessi.get(i);
+				response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\"}");
+
+				response.getWriter().append("]");
+			}else{
+				response.getWriter().append("[{\"alert\":true\"}]");
+			}
 		}
-		else{
-			System.out.println("nessun permesso trovato nell'applicazione(nome applicazione) analizzata");
-		}
-
-
-	////////////end file///////////////	
-		response.getWriter().append("[");
-		
-		int i;
-		for(i = 0; i < permessi.size()-1; i++){
-
-			Permesso prova = permessi.get(i);
-			response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\"},");
-		}
-		Permesso prova = permessi.get(i);
-		response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\"}");
-		response.getWriter().append("]");
-		
 	}
 
 	/**
@@ -133,7 +163,7 @@ public class VisualizzaGraficoApp extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 
-		
+
 	}
 
 }
