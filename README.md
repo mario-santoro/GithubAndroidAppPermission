@@ -1,5 +1,6 @@
 # Test Permission of Android App
-<img  height="200" src="https://github.com/mario-santoro/GithubAndroidAppPermission/blob/master/img/GitHubpermission.png">
+<img src="https://github.com/mario-santoro/GithubAndroidAppPermission/blob/master/img/GitHubpermission.png">
+<br>
 # Introduzione
 Github Permission of Android app è un applicativo che si propone di controllare i permessi delle applicazioni Android andando ad analizzare il file AndridManifest.xml. Essa confronta i permessi dell’app in analisi con i permessi di tutte le altre app della stessa categoria (le categorie sono raggruppate dal PlayStore ufficiale) già precedentemente analizzati, dando visione all’utente il numero di quante applicazioni hanno usato lo stesso permesso. Riusciamo cosi ad analizzare se un relativo permesso è utilizzato da più o meno applicazioni, avendo cosi un feedback visivo di quale permesso può essere inusuale per quella categoria, e quindi potenzialmente pericoloso o meno (cioè più comune e quindi uno standard per quella categoria di applicazioni). Oltre a questo proposito, l’applicativo porta anche una maggior consapevolezza di quali permessi vengono utilizzati dalle varie applicazioni, e quindi a cosa accedono, e a cosa noi utenti diamo il permesso di accedere.
 # Descrizione
