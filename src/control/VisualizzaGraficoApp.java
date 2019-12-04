@@ -74,8 +74,8 @@ public class VisualizzaGraficoApp extends HttpServlet {
 		
 		if(new File(fileTestoApplicazione).exists()){
 			
-			controll= "questa applicaione già è stata analizzata";
-			System.out.println(controll);
+			controll= "questa applicazione gia' e' stata analizzata";
+		
 
 		}else{
 
@@ -123,12 +123,13 @@ public class VisualizzaGraficoApp extends HttpServlet {
 				p=ap.AggiornaCategorie(permessi, current, cat);
 			}
 			else{
-				controll= "nessun permesso trovato nell'applicazione(nome applicazione) analizzata";
+				controll= "nessun permesso trovato nell'applicazione analizzata";
 				System.out.println(controll);
 			}
-
+		}
 
 			////////////end file///////////////	
+			
 			if(controll==null){
 				response.getWriter().append("[");
 
@@ -151,9 +152,10 @@ public class VisualizzaGraficoApp extends HttpServlet {
 
 				response.getWriter().append("]");
 			}else{
-				response.getWriter().append("[{\"alert\":true\"}]");
+			
+				response.getWriter().append("[{\"control\":\""+controll+"\"}]");
 			}
-		}
+		
 	}
 
 	/**

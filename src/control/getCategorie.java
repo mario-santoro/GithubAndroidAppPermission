@@ -35,17 +35,15 @@ public class getCategorie extends HttpServlet {
 			  
 			   Scanner in2=new Scanner(fr);
 			   response.getWriter().append("[");
-			 //  String og="";
+			   String output="";
 				while(in2.hasNext()){
-					//og+="{\"categoria\":\""+in2.nextLine()+"\"},";
-					response.getWriter().append("{\"categoria\":\""+in2.nextLine()+"\"},");
+					
+					output+="{\"categoria\":\""+in2.nextLine()+"\"},";
 					
 				}
-				//int c=og.length();
-			
-			
-				
-				response.getWriter().append("{\"categoria\":\"prova\"}");
+				int c=output.length();
+				String tmp=output.substring(0,c-1);
+				response.getWriter().append(tmp);
 				response.getWriter().append("]");
 				in2.close();
 	}
