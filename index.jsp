@@ -9,7 +9,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Test App permission</title>
+<title>Github Permission of Android App</title>
+<link rel="icon" href="img/GithubPermissionOfAndroidApp.ico" />
 <script src="js/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script type="text/javascript">
@@ -49,7 +50,7 @@
 
   <div class="container">
   <br>
-   <h1>Test App Android Permission</h1>
+   <h1>Github Permission of Android App</h1>
   <p>Quesa pagina web serve per esaminare i permessi di un app open source presente su Github</p>
   <blockquote>
     <p>Per esaminare un app presente in github e controllare se ha permessi anomali, inserisci il link della repository nell'apposito campo di testo e inserisci la categoria dell'app tra le opzioni.</p>
@@ -184,22 +185,30 @@ function graficoApp(){
     		var i=0;
   
     		 var d = JSON.parse(data);
-    		 var p=0;
-    		 var str="<table class=\"table table-hover\" style=\"width:100%\"><tr><th>Nome permesso</th> <th>Occorrenze di questo permesso in altre app di questa categoria</th>  </tr>";
-			for (i = 0; i <d.length; i++) { 
+    	
+    		 var str='';
+		
+    		 if(d[0].control!=null){
+    			 
+    			alert(d[0].control);
+    		 }else{
+    			 str="<table class=\"table table-hover\" style=\"width:100%\"><tr><th>Nome permesso</th> <th>Occorrenze di questo permesso in altre app di questa categoria</th>  </tr>";
+    		 for (i = 0; i <d.length; i++) { 
     		   // massPopChart.data.datasets[0].data.push('1');
     		    //massPopChart.data.datasets[0].backgroundColor.push('rgba(255, 206, 86, 0.6)');
     		  //  massPopChart.data.labels.push(d[i].permesso);
-    		  if(p==0 && i==3){
-    			  str+="<tr class=\"danger\"> <td>"+d[3].permesso+"</td><td>0</td> </tr>"; 
+    		  if(d[i].counter==1){
+    			  str+="<tr class=\"danger\"> <td>"+d[i].permesso+"</td><td>1</td> </tr>"; 
     			  
+    		  }else{
+    		  str+="<tr> <td>"+d[i].permesso+"</td><td>"+d[i].counter+"</td> </tr>";
     		  }
-    		  str+="<tr> <td>"+d[i].permesso+"</td><td>numero</td> </tr>";
 			}
 			
 			str+="</table>";
     		   // massPopChart.data.datasets[0].data.push(0);
     		   // massPopChart.update();
+    		 }
 			  document.getElementById("tabella").innerHTML = str;
     		}
     	
