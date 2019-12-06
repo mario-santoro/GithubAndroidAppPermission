@@ -74,9 +74,11 @@ public class VisualizzaGraficoApp extends HttpServlet {
 		
 		if(new File(fileTestoApplicazione).exists()){
 			
-			controll= "questa applicazione gia' e' stata analizzata";
-		
-
+			//controll= "questa applicazione gia' e' stata analizzata";
+			
+			permessi= ap.getPermessiFromFile(fileTestoApplicazione);
+			p= ap.permessiAppEsistente(permessi, current, cat);
+			
 		}else{
 
 			File fileApp = new File(fileTestoApplicazione);
@@ -124,6 +126,8 @@ public class VisualizzaGraficoApp extends HttpServlet {
 			}
 			else{
 				controll= "nessun permesso trovato nell'applicazione analizzata";
+				
+				if(fileApp.delete()){System.out.println("cancellato");}else{System.out.println("non eliminato");}
 				System.out.println(controll);
 			}
 		}
@@ -131,24 +135,22 @@ public class VisualizzaGraficoApp extends HttpServlet {
 			////////////end file///////////////	
 			
 			if(controll==null){
+				int min= ap.minimo(permessi);
+				
 				response.getWriter().append("[");
-
+				
 				int i;
 				for(i = 0; i < permessi.size()-1; i++){
 
 					Permesso prova = permessi.get(i);
+						
 
-					if(p.get(i).getPermesso()==prova.getPermesso()){
-
-						response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\"},");
-					}else{
-
-						response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\"0\"},");
-					}
+						response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\",\"nome\":\""+nome.toUpperCase()+"\",\"minimo\":\""+min+"\"},");
+			
 
 				}
 				Permesso prova = permessi.get(i);
-				response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\"}");
+				response.getWriter().append("{\"permesso\":\""+prova.getPermesso()+"\",\"counter\":\""+p.get(i).getCounter()+"\",\"nome\":\""+nome+"\"}");
 
 				response.getWriter().append("]");
 			}else{
