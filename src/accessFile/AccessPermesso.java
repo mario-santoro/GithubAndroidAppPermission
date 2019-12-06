@@ -3,6 +3,7 @@ package accessFile;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class AccessPermesso {
 
 		}while(j<2);
 
-		nome = nomeApplicazione.substring(0, sostituisci-1)+"-"+nomeApplicazione.substring(sostituisci+1,subs-1);
+		nome = nomeApplicazione.substring(0, sostituisci)+"-"+nomeApplicazione.substring(sostituisci+1,subs-1);
 
 		return nome;
 	}
@@ -89,7 +90,7 @@ public class AccessPermesso {
 		BufferedWriter bw = new BufferedWriter(fw);
 		for(String s : permessiApp){
 			
-			bw.write(s+"\n");
+			bw.write(s+",1"+"\n");
 		}
 		bw.close();
 		fw.close();
@@ -143,32 +144,12 @@ public class AccessPermesso {
 
 			}
 
-			/*int i = 0;
-			for(Permesso p1 : ALp){
-
-				if(!permessiTMP.contains(p1.getPermesso())){
-
-					cat.add(p1);
-				}else{
-					Permesso tmp = cat.get(i);
-					int count = tmp.getCounter();
-
-					count++;
-					tmp.setCounter(count);
-
-					cat.set(i, tmp);
-					System.out.println("else "+ cat.get(i).getPermesso()+" counter: "+cat.get(i).getCounter());
-					ALp.set(i, tmp);
-
-				}
-			}
-			 */
-
-
-			int flag=0;
+			
 			bufferFileApp.close();
+			int flag=0;
 			int i = 0;
 			int j=0;
+			
 			for(i=0; i<ALp.size();i++){
 				for(j=0; j<cat.size();j++){
 					flag=0;
@@ -176,9 +157,9 @@ public class AccessPermesso {
 					if(ALp.get(i).getPermesso().equals(cat.get(j).getPermesso())) {
 						flag=1;
 						
-						ALp.get(i).setCounter(ALp.get(i).getCounter()+1);
+						ALp.get(i).setCounter(cat.get(j).getCounter()+1);
 						cat.get(j).setCounter(cat.get(j).getCounter()+1);
-						
+					
 						break;
 
 					}
@@ -187,12 +168,8 @@ public class AccessPermesso {
 
 
 				if(flag==0){
-				
-
 					cat.add(ALp.get(i));
-					int c= cat.size();
 				}else{
-				
 					flag=0;
 				}
 
@@ -222,5 +199,68 @@ public class AccessPermesso {
 
 
 	}
+	
+	public ArrayList<Permesso> getPermessiFromFile(String path) throws NumberFormatException, IOException{
+		ArrayList<Permesso> permessi = new ArrayList<Permesso>();
+		String stringaFileApp=null;
+
+		File fileApp = new File(path);
+		FileReader readerFileApp = new FileReader(fileApp);  //Creation of File Reader object
+		BufferedReader bufferFileApp = new BufferedReader(readerFileApp); //Creation of BufferedReader object
+
+		while((stringaFileApp=bufferFileApp.readLine())!=null){ 
+			Permesso p3 = new Permesso();
+			String[] lineaSplittata = stringaFileApp.split(",");
+			p3.setPermesso(lineaSplittata[0]);
+			p3.setCounter(Integer.parseInt(lineaSplittata[1]));
+			permessi.add(p3);
+			
+		}
+		
+		return permessi;
+	}
+	
+	public ArrayList<Permesso> permessiAppEsistente(ArrayList<Permesso> ALp, String current, String cat) throws NumberFormatException, IOException{
+		
+		String percorsoFileCategoria = current+"/"+cat+"/mediaPer"+cat+".txt";
+		ArrayList<Permesso> p = getPermessiFromFile(percorsoFileCategoria);
+		
+		int flag=0;
+		int i = 0;
+		int j=0;
+		for(i=0; i<ALp.size();i++){
+			for(j=0; j<p.size();j++){
+				flag=0;
+				if(ALp.get(i).getPermesso().equals(p.get(j).getPermesso())) {
+					flag=1;
+					ALp.get(i).setCounter(p.get(j).getCounter());
+					break;
+				}
+			}
+
+
+			if(flag==0){
+				System.out.println("non dovrei essere qui!");
+			}else{
+				flag=0;
+			}
+		}
+
+		return ALp;
+		
+	}
+	
+public int minimo(ArrayList<Permesso> permessi){
+	int min=permessi.get(0).getCounter();
+	for(int i=0;i<permessi.size();i++){
+		if(permessi.get(i).getCounter()<min){
+			
+			min=permessi.get(i).getCounter();
+		}
+		
+	}
+	
+	return min;
+}
 
 }
