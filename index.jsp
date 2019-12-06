@@ -13,6 +13,15 @@
 <link rel="icon" href="img/GithubPermissionOfAndroidApp.ico" />
 <script src="js/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<style type="text/css">
+.immagine{
+ 
+  width: 300px;
+ margin-top: 30px;
+  margin-left: 20px;
+  padding: 10px;
+}
+</style>
 <script type="text/javascript">
 
 	  $(document).ready(function(){ 
@@ -49,11 +58,15 @@
 
 
   <div class="container">
+  <div class="row">
+   
+   <div class="col-sm-8">
   <br>
    <h1>Github Permission of Android App</h1>
+   
   <p>Quesa pagina web serve per esaminare i permessi di un app open source presente su Github</p>
   <blockquote>
-    <p>Per esaminare un app presente in github e controllare se ha permessi anomali, inserisci il link della repository nell'apposito campo di testo e inserisci la categoria dell'app tra le opzioni.</p>
+    <p>Per esaminare un app presente in github e controllare se ha permessi anomali, inserisci il link del file manifest.xml nella repository nell'apposito campo di testo e inserisci la categoria dell'app tra le opzioni.</p>
     <footer>UniSA</footer>
   </blockquote>
  
@@ -69,8 +82,14 @@
 	</div>
 <br><br>
     <!--<canvas id="myChart"></canvas>  -->
+   
     <div id="tabella"></div>
     <br> <br>
+    </div>
+     <div class="col-sm-4">
+    <img class="immagine" src="img/GitHubpermission.png">
+    </div>
+    </div>
   </div>
   
 <script type="text/javascript">
@@ -192,12 +211,13 @@ function graficoApp(){
     			 
     			alert(d[0].control);
     		 }else{
-    			 str="<table class=\"table table-hover\" style=\"width:100%\"><tr><th>Nome permesso</th> <th>Occorrenze di questo permesso in altre app di questa categoria</th>  </tr>";
+    			 
+    			 str="<h2>App analizzata: "+d[0].nome+" </h2><br><table class=\"table table-hover\" style=\"width:100%\"><tr><th>Nome permesso</th> <th>Occorrenze di questo permesso in altre app di questa categoria</th>  </tr>";
     		 for (i = 0; i <d.length; i++) { 
     		   // massPopChart.data.datasets[0].data.push('1');
     		    //massPopChart.data.datasets[0].backgroundColor.push('rgba(255, 206, 86, 0.6)');
     		  //  massPopChart.data.labels.push(d[i].permesso);
-    		  if(d[i].counter==1){
+    		  if(d[i].counter==d[0].minimo){
     			  str+="<tr class=\"danger\"> <td>"+d[i].permesso+"</td><td>1</td> </tr>"; 
     			  
     		  }else{
